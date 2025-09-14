@@ -4,12 +4,15 @@
       <div class="col-md-6">
         <form @submit.prevent="calcular">
           <!-- Nota 1 -->
-          <div class="mb-4 text-center">
+          <div class="mb-4 text-center position-relative">
             <label class="form-label fw-bold">Nota 1</label>
             <input
               type="number"
               class="form-control text-center"
-              :class="{ 'border-primary': errores.nota1, 'border-warning': mostrarTooltipNota1 }"
+              :class="{ 
+                'border-primary': errores.nota1, 
+                'border-warning': (formulario.nota1 !== null && formulario.nota1 !== '' && (formulario.nota1 < 10 || formulario.nota1 > 70))
+              }"
               v-model.number="formulario.nota1"
               placeholder="Nota 1"
               min="10"
@@ -28,15 +31,24 @@
                 El valor debe ser {{ formulario.nota1 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
               </div>
             </div>
+            <!-- Segunda validación con mensaje de error -->
+            <div v-if="formulario.nota1 !== null && formulario.nota1 !== '' && (formulario.nota1 < 10 || formulario.nota1 > 70)" 
+                 class="validation-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              El valor debe ser {{ formulario.nota1 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
+            </div>
           </div>
           
           <!-- Nota 2 -->
-          <div class="mb-4 text-center">
+          <div class="mb-4 text-center position-relative">
             <label class="form-label fw-bold">Nota 2</label>
             <input
               type="number"
               class="form-control text-center"
-              :class="{ 'border-primary': errores.nota2, 'border-warning': mostrarTooltipNota2 }"
+              :class="{ 
+                'border-primary': errores.nota2, 
+                'border-warning': (formulario.nota2 !== null && formulario.nota2 !== '' && (formulario.nota2 < 10 || formulario.nota2 > 70))
+              }"
               v-model.number="formulario.nota2"
               placeholder="Nota 2"
               min="10"
@@ -55,15 +67,24 @@
                 El valor debe ser {{ formulario.nota2 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
               </div>
             </div>
+            <!-- Segunda validación con mensaje de error -->
+            <div v-if="formulario.nota2 !== null && formulario.nota2 !== '' && (formulario.nota2 < 10 || formulario.nota2 > 70)" 
+                 class="validation-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              El valor debe ser {{ formulario.nota2 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
+            </div>
           </div>
           
           <!-- Nota 3 -->
-          <div class="mb-4 text-center">
+          <div class="mb-4 text-center position-relative">
             <label class="form-label fw-bold">Nota 3</label>
             <input
               type="number"
               class="form-control text-center"
-              :class="{ 'border-primary': errores.nota3, 'border-warning': mostrarTooltipNota3 }"
+              :class="{ 
+                'border-primary': errores.nota3, 
+                'border-warning': (formulario.nota3 !== null && formulario.nota3 !== '' && (formulario.nota3 < 10 || formulario.nota3 > 70))
+              }"
               v-model.number="formulario.nota3"
               placeholder="Nota 3"
               min="10"
@@ -82,15 +103,24 @@
                 El valor debe ser {{ formulario.nota3 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
               </div>
             </div>
+            <!-- Segunda validación con mensaje de error -->
+            <div v-if="formulario.nota3 !== null && formulario.nota3 !== '' && (formulario.nota3 < 10 || formulario.nota3 > 70)" 
+                 class="validation-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              El valor debe ser {{ formulario.nota3 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
+            </div>
           </div>
           
           <!-- Asistencia -->
-          <div class="mb-4 text-center">
+          <div class="mb-4 text-center position-relative">
             <label class="form-label fw-bold">Asistencia %</label>
             <input
               type="number"
               class="form-control text-center"
-              :class="{ 'border-primary': errores.asistencia, 'border-warning': mostrarTooltipAsistencia }"
+              :class="{ 
+                'border-primary': errores.asistencia, 
+                'border-warning': (formulario.asistencia !== null && formulario.asistencia !== '' && !isNaN(formulario.asistencia) && (formulario.asistencia < 0 || formulario.asistencia > 100))
+              }"
               v-model.number="formulario.asistencia"
               placeholder="Asistencia"
               min="0"
@@ -108,6 +138,12 @@
                 <i class="fas fa-exclamation-triangle text-warning"></i>
                 El valor debe ser {{ formulario.asistencia < 0 ? 'superior o igual a 0' : 'inferior o igual a 100' }}
               </div>
+            </div>
+            <!-- Segunda validación con mensaje de error -->
+            <div v-if="formulario.asistencia !== null && formulario.asistencia !== '' && (formulario.asistencia < 0 || formulario.asistencia > 100)" 
+                 class="validation-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              El valor debe ser {{ formulario.asistencia < 0 ? 'superior o igual a 0' : 'inferior o igual a 100' }}
             </div>
           </div>
           
@@ -345,6 +381,46 @@ export default {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 5px solid #ffc107;
+}
+
+/* Segunda validación - Mensaje de error en tiempo real */
+.validation-message {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  color: #856404;
+  padding: 8px 12px;
+  margin-top: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: slideDown 0.3s ease-out;
+}
+
+.validation-message i {
+  color: #ffc107;
+  font-size: 16px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Posición relativa para los contenedores */
+.position-relative {
+  position: relative;
 }
 
 /* Aviso de validación */
