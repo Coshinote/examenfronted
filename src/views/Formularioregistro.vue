@@ -1,109 +1,75 @@
 <template>
-  <div id="app">
-    <!-- Header Navigation -->
-    <nav class="navbar navbar-light bg-light border-bottom">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Programación Front End</span>
-        <div class="d-flex">
-          <input 
-            class="form-control me-2" 
-            type="search" 
-            placeholder="Search" 
-            style="width: 200px;"
-          >
-          <button class="btn btn-outline-success" type="submit">Búsqueda</button>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Tabs Navigation -->
-    <div class="container-fluid mt-3">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link text-muted" href="#">Cálculo de calificaciones</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Formulario de Registro</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-muted" href="#">En construcción</a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Main Content -->
-    <div class="container-fluid mt-5">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <form @submit.prevent="enviarFormulario">
-            <!-- Nombre -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Nombre:</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="formulario.nombre"
-                @blur="validarNombre"
-                @input="limpiarError('nombre')"
-              >
-              <div v-if="errores.nombre" class="error-message">
-                {{ mensajesError.nombre }}
-              </div>
+  <div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form @submit.prevent="enviarFormulario">
+          <!-- Nombre -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Nombre:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="formulario.nombre"
+              @blur="validarNombre"
+              @input="limpiarError('nombre')"
+            >
+            <div v-if="errores.nombre" class="error-message">
+              {{ mensajesError.nombre }}
             </div>
+          </div>
 
-            <!-- Correo -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Correo:</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="formulario.correo"
-                @blur="validarCorreo"
-                @input="limpiarError('correo')"
-              >
-              <div v-if="errores.correo" class="error-message">
-                {{ mensajesError.correo }}
-              </div>
+          <!-- Correo -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Correo:</label>
+            <input
+              type="text"
+              class="form-control"
+              v-model="formulario.correo"
+              @blur="validarCorreo"
+              @input="limpiarError('correo')"
+            >
+            <div v-if="errores.correo" class="error-message">
+              {{ mensajesError.correo }}
             </div>
+          </div>
 
-            <!-- Contraseña -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Contraseña:</label>
-              <input
-                type="password"
-                class="form-control"
-                v-model="formulario.contrasena"
-                @blur="validarContrasena"
-                @input="limpiarError('contrasena')"
-              >
-              <div v-if="errores.contrasena" class="error-message">
-                {{ mensajesError.contrasena }}
-              </div>
+          <!-- Contraseña -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Contraseña:</label>
+            <input
+              type="password"
+              class="form-control"
+              v-model="formulario.contrasena"
+              @blur="validarContrasena"
+              @input="limpiarError('contrasena')"
+            >
+            <div v-if="errores.contrasena" class="error-message">
+              {{ mensajesError.contrasena }}
             </div>
+          </div>
 
-            <!-- Repetir Contraseña -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Repetir Contraseña:</label>
-              <input
-                type="password"
-                class="form-control"
-                v-model="formulario.repetirContrasena"
-                @blur="validarRepetirContrasena"
-                @input="limpiarError('repetirContrasena')"
-              >
-              <div v-if="errores.repetirContrasena" class="error-message">
-                {{ mensajesError.repetirContrasena }}
-              </div>
+          <!-- Repetir Contraseña -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Repetir Contraseña:</label>
+            <input
+              type="password"
+              class="form-control"
+              v-model="formulario.repetirContrasena"
+              @blur="validarRepetirContrasena"
+              @input="limpiarError('repetirContrasena')"
+            >
+            <div v-if="errores.repetirContrasena" class="error-message">
+              {{ mensajesError.repetirContrasena }}
             </div>
+          </div>
 
-            <!-- Botón Enviar -->
-            <div class="text-start">
-              <button type="submit" class="btn btn-success px-4">
-                Enviar
-              </button>
-            </div>
-          </form>
-        </div>
+          <!-- Botón Enviar -->
+          <div class="text-start">
+            <button type="submit" class="btn btn-success px-4">
+              Enviar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -253,30 +219,6 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos generales */
-body {
-  background-color: #f8f9fa;
-}
-
-/* Navegación */
-.navbar-brand {
-  font-weight: 600;
-  color: #333 !important;
-}
-
-.nav-tabs .nav-link.active {
-  background-color: #fff;
-  border-color: #dee2e6 #dee2e6 #fff;
-  color: #333;
-  font-weight: 500;
-}
-
-.nav-tabs .nav-link {
-  color: #6c757d;
-  border: 1px solid transparent;
-  padding: 12px 20px;
-}
-
 /* Formulario */
 .form-control {
   border: 1px solid #ced4da;
@@ -328,22 +270,8 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .container-fluid {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-  
   .form-control {
     max-width: 100%;
-  }
-  
-  .navbar .d-flex {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .navbar .d-flex input {
-    width: 100% !important;
   }
 }
 </style>

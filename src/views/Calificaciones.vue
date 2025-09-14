@@ -1,130 +1,134 @@
 <template>
-  <div id="app">
-    <!-- Header Navigation -->
-    <nav class="navbar navbar-light bg-light border-bottom">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Programación Front End</span>
-        <div class="d-flex">
-          <input 
-            class="form-control me-2" 
-            type="search" 
-            placeholder="Search" 
-            style="width: 200px;"
-          >
-          <button class="btn btn-outline-success" type="submit">Búsqueda</button>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Tabs Navigation -->
-    <div class="container-fluid mt-3">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Cálculo de calificaciones</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-muted" href="#">Formulario de Registro</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-muted" href="#">En construcción</a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Main Content -->
-    <div class="container-fluid mt-5">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <form @submit.prevent="calcular">
-            <!-- Nota 1 -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Nota 1</label>
-              <input
-                type="number"
-                class="form-control text-center"
-                :class="{ 'border-primary': errores.nota1 }"
-                v-model.number="formulario.nota1"
-                placeholder="Nota 1"
-                min="10"
-                max="70"
-                step="0.1"
-              >
-            </div>
-
-            <!-- Nota 2 -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Nota 2</label>
-              <input
-                type="number"
-                class="form-control text-center"
-                :class="{ 'border-primary': errores.nota2 }"
-                v-model.number="formulario.nota2"
-                placeholder="Nota 2"
-                min="10"
-                max="70"
-                step="0.1"
-              >
-            </div>
-
-            <!-- Nota 3 -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Nota 3</label>
-              <input
-                type="number"
-                class="form-control text-center"
-                :class="{ 'border-primary': errores.nota3, 'border-warning': mostrarTooltipNota3 }"
-                v-model.number="formulario.nota3"
-                placeholder="Nota 3"
-                min="10"
-                max="70"
-                step="0.1"
-                @focus="mostrarTooltipNota3 = true"
-                @blur="mostrarTooltipNota3 = false"
-              >
-              <!-- Tooltip para validación -->
-              <div v-if="mostrarTooltipNota3 && (formulario.nota3 < 10 || formulario.nota3 > 70)" 
-                   class="tooltip-custom">
-                <div class="tooltip-arrow"></div>
-                <div class="tooltip-content">
-                  <i class="fas fa-exclamation-triangle text-warning"></i>
-                  El valor debe ser {{ formulario.nota3 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
-                </div>
+  <div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form @submit.prevent="calcular">
+          <!-- Nota 1 -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Nota 1</label>
+            <input
+              type="number"
+              class="form-control text-center"
+              :class="{ 'border-primary': errores.nota1, 'border-warning': mostrarTooltipNota1 }"
+              v-model.number="formulario.nota1"
+              placeholder="Nota 1"
+              min="10"
+              max="70"
+              step="0.1"
+              @focus="mostrarTooltipNota1 = true"
+              @blur="mostrarTooltipNota1 = false"
+              @input="validarEnTiempoReal"
+            >
+            <!-- Tooltip para validación de Nota 1 -->
+            <div v-if="mostrarTooltipNota1 && (formulario.nota1 < 10 || formulario.nota1 > 70)"
+                 class="tooltip-custom">
+              <div class="tooltip-arrow"></div>
+              <div class="tooltip-content">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                El valor debe ser {{ formulario.nota1 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
               </div>
             </div>
-
-            <!-- Asistencia -->
-            <div class="mb-4 text-center">
-              <label class="form-label fw-bold">Asistencia %</label>
-              <input
-                type="number"
-                class="form-control text-center"
-                :class="{ 'border-primary': errores.asistencia }"
-                v-model.number="formulario.asistencia"
-                placeholder="Asistencia"
-                min="0"
-                max="100"
-                step="1"
-              >
-            </div>
-
-            <!-- Botón Calcular -->
-            <div class="text-center mb-4">
-              <button type="submit" class="btn btn-primary px-4">
-                Calcular
-              </button>
-            </div>
-          </form>
-
-          <!-- Mensaje de Error General -->
-          <div v-if="mostrarErrorGeneral" class="text-center mb-4">
-            <p class="text-danger fw-bold">Por favor, ingrese valores válidos para las notas y la asistencia</p>
           </div>
-
-          <!-- Resultados -->
-          <div v-if="mostrarResultado" class="text-center">
-            <p class="fw-bold mb-2">El promedio es: {{ promedioPonderado.toFixed(2) }}</p>
-            <p class="fw-bold" :class="estadoClase">Tu estado es: {{ estado }}</p>
+          
+          <!-- Nota 2 -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Nota 2</label>
+            <input
+              type="number"
+              class="form-control text-center"
+              :class="{ 'border-primary': errores.nota2, 'border-warning': mostrarTooltipNota2 }"
+              v-model.number="formulario.nota2"
+              placeholder="Nota 2"
+              min="10"
+              max="70"
+              step="0.1"
+              @focus="mostrarTooltipNota2 = true"
+              @blur="mostrarTooltipNota2 = false"
+              @input="validarEnTiempoReal"
+            >
+            <!-- Tooltip para validación de Nota 2 -->
+            <div v-if="mostrarTooltipNota2 && (formulario.nota2 < 10 || formulario.nota2 > 70)"
+                 class="tooltip-custom">
+              <div class="tooltip-arrow"></div>
+              <div class="tooltip-content">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                El valor debe ser {{ formulario.nota2 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
+              </div>
+            </div>
           </div>
+          
+          <!-- Nota 3 -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Nota 3</label>
+            <input
+              type="number"
+              class="form-control text-center"
+              :class="{ 'border-primary': errores.nota3, 'border-warning': mostrarTooltipNota3 }"
+              v-model.number="formulario.nota3"
+              placeholder="Nota 3"
+              min="10"
+              max="70"
+              step="0.1"
+              @focus="mostrarTooltipNota3 = true"
+              @blur="mostrarTooltipNota3 = false"
+              @input="validarEnTiempoReal"
+            >
+            <!-- Tooltip para validación de Nota 3 -->
+            <div v-if="mostrarTooltipNota3 && (formulario.nota3 < 10 || formulario.nota3 > 70)"
+                 class="tooltip-custom">
+              <div class="tooltip-arrow"></div>
+              <div class="tooltip-content">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                El valor debe ser {{ formulario.nota3 < 10 ? 'superior o igual a 10' : 'inferior o igual a 70' }}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Asistencia -->
+          <div class="mb-4 text-center">
+            <label class="form-label fw-bold">Asistencia %</label>
+            <input
+              type="number"
+              class="form-control text-center"
+              :class="{ 'border-primary': errores.asistencia, 'border-warning': mostrarTooltipAsistencia }"
+              v-model.number="formulario.asistencia"
+              placeholder="Asistencia"
+              min="0"
+              max="100"
+              step="1"
+              @focus="mostrarTooltipAsistencia = true"
+              @blur="mostrarTooltipAsistencia = false"
+              @input="validarEnTiempoReal"
+            >
+            <!-- Tooltip para validación de Asistencia -->
+            <div v-if="mostrarTooltipAsistencia && (formulario.asistencia < 0 || formulario.asistencia > 100)"
+                 class="tooltip-custom">
+              <div class="tooltip-arrow"></div>
+              <div class="tooltip-content">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                El valor debe ser {{ formulario.asistencia < 0 ? 'superior o igual a 0' : 'inferior o igual a 100' }}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Botón Calcular -->
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary px-4">
+              Calcular
+            </button>
+          </div>
+          
+          <!-- Aviso de validación -->
+          <div class="alert alert-danger d-flex align-items-center justify-content-center" role="alert" v-if="mostrarAvisoValidacion">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <span>Por favor, ingrese valores válidos para las notas y la asistencia</span>
+          </div>
+        </form>
+        
+        <!-- Resultados -->
+        <div v-if="mostrarResultado" class="text-center">
+          <p class="fw-bold mb-2">El promedio es: {{ promedioPonderado.toFixed(2) }}</p>
+          <p class="fw-bold" :class="estadoClase">Tu estado es: {{ estado }}</p>
         </div>
       </div>
     </div>
@@ -145,7 +149,11 @@ export default {
       errores: {},
       mostrarResultado: false,
       mostrarErrorGeneral: false,
+      mostrarTooltipNota1: false,
+      mostrarTooltipNota2: false,
       mostrarTooltipNota3: false,
+      mostrarTooltipAsistencia: false,
+      mostrarAvisoValidacion: false,
       promedioPonderado: 0,
       estado: '',
       aprobado: false
@@ -157,60 +165,100 @@ export default {
     }
   },
   methods: {
+    validarEnTiempoReal() {
+      // Ocultar resultado al cambiar valores
+      this.mostrarResultado = false;
+      
+      let hayValoresInvalidos = false;
+      
+      // Verificar Nota 1
+      if (this.formulario.nota1 !== null && this.formulario.nota1 !== '') {
+        if (this.formulario.nota1 < 10 || this.formulario.nota1 > 70) {
+          hayValoresInvalidos = true;
+        }
+      }
+      
+      // Verificar Nota 2
+      if (this.formulario.nota2 !== null && this.formulario.nota2 !== '') {
+        if (this.formulario.nota2 < 10 || this.formulario.nota2 > 70) {
+          hayValoresInvalidos = true;
+        }
+      }
+      
+      // Verificar Nota 3
+      if (this.formulario.nota3 !== null && this.formulario.nota3 !== '') {
+        if (this.formulario.nota3 < 10 || this.formulario.nota3 > 70) {
+          hayValoresInvalidos = true;
+        }
+      }
+      
+      // Verificar Asistencia
+      if (this.formulario.asistencia !== null && this.formulario.asistencia !== '') {
+        if (this.formulario.asistencia < 0 || this.formulario.asistencia > 100) {
+          hayValoresInvalidos = true;
+        }
+      }
+      
+      this.mostrarAvisoValidacion = hayValoresInvalidos;
+    },
+    
     validarCampos() {
       this.errores = {};
       let valido = true;
-
+      
       // Validar Nota 1
-      if (this.formulario.nota1 === null || this.formulario.nota1 === '' || 
+      if (this.formulario.nota1 === null || this.formulario.nota1 === '' ||
           this.formulario.nota1 < 10 || this.formulario.nota1 > 70) {
         this.errores.nota1 = true;
         valido = false;
       }
-
+      
       // Validar Nota 2
-      if (this.formulario.nota2 === null || this.formulario.nota2 === '' || 
+      if (this.formulario.nota2 === null || this.formulario.nota2 === '' ||
           this.formulario.nota2 < 10 || this.formulario.nota2 > 70) {
         this.errores.nota2 = true;
         valido = false;
       }
-
+      
       // Validar Nota 3
-      if (this.formulario.nota3 === null || this.formulario.nota3 === '' || 
+      if (this.formulario.nota3 === null || this.formulario.nota3 === '' ||
           this.formulario.nota3 < 10 || this.formulario.nota3 > 70) {
         this.errores.nota3 = true;
         valido = false;
       }
-
+      
       // Validar Asistencia
-      if (this.formulario.asistencia === null || this.formulario.asistencia === '' || 
+      if (this.formulario.asistencia === null || this.formulario.asistencia === '' ||
           this.formulario.asistencia < 0 || this.formulario.asistencia > 100) {
         this.errores.asistencia = true;
         valido = false;
       }
-
+      
+      // Mostrar aviso si hay errores en cualquier campo
+      this.mostrarAvisoValidacion = !valido;
       return valido;
     },
+    
     calcular() {
       this.mostrarResultado = false;
       this.mostrarErrorGeneral = false;
-      
+
       if (!this.validarCampos()) {
         this.mostrarErrorGeneral = true;
         return;
       }
-
+      
       // Calcular promedio ponderado
       this.promedioPonderado = (
         (this.formulario.nota1 * 0.35) +
         (this.formulario.nota2 * 0.35) +
         (this.formulario.nota3 * 0.30)
       );
-
+      
       // Determinar si aprueba
       const promedioSuficiente = this.promedioPonderado >= 40;
       const asistenciaSuficiente = this.formulario.asistencia >= 80;
-
+      
       this.aprobado = promedioSuficiente && asistenciaSuficiente;
       this.estado = this.aprobado ? 'Aprobado' : 'Reprobado';
       this.mostrarResultado = true;
@@ -220,30 +268,6 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos generales */
-body {
-  background-color: #f8f9fa;
-}
-
-/* Navegación */
-.navbar-brand {
-  font-weight: 600;
-  color: #333 !important;
-}
-
-.nav-tabs .nav-link.active {
-  background-color: #fff;
-  border-color: #dee2e6 #dee2e6 #fff;
-  color: #333;
-  font-weight: 500;
-}
-
-.nav-tabs .nav-link {
-  color: #6c757d;
-  border: 1px solid transparent;
-  padding: 12px 20px;
-}
-
 /* Formulario */
 .form-control {
   border: 1px solid #ced4da;
@@ -323,6 +347,16 @@ body {
   border-top: 5px solid #ffc107;
 }
 
+/* Aviso de validación */
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
 /* Resultados */
 .text-success {
   color: #28a745 !important;
@@ -334,22 +368,8 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .container-fluid {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-  
   .form-control {
     max-width: 100%;
-  }
-  
-  .navbar .d-flex {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .navbar .d-flex input {
-    width: 100% !important;
   }
 }
 </style>
