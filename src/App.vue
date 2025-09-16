@@ -28,9 +28,6 @@
             Formulario de Registro
           </router-link>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-muted" href="#">En construcción</a>
-        </li>
       </ul>
     </div>
 
